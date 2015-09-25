@@ -12,19 +12,19 @@ class GP_Script_Import_Originals extends GP_CLI {
 			$this->usage();
 		}
 		$project = GP::$project->by_path( $this->options['p'] );
-		if ( !$project ) $this->error( __('Project not found!') );
+		if ( !$project ) $this->error( __( 'Project not found!', 'glotpress' ) );
 
 		$format = gp_array_get( GP::$formats, isset( $this->options['o'] )? $this->options['o'] : 'po', null );
-		if ( !$format ) $this->error( __('No such format.') );;
+		if ( !$format ) $this->error( __( 'No such format.', 'glotpress' ) );;
 
 		$translations = $format->read_originals_from_file( $this->options['f'], $project );
 		if ( !$translations ) {
-			$this->error( __("Couldn't load translations from file!") );
+			$this->error( __( "Couldn't load translations from file!", 'glotpress' ) );
 		}
 
 		list( $originals_added, $originals_existing, $originals_fuzzied, $originals_obsoleted ) = GP::$original->import_for_project( $project, $translations );
 		printf(
-			__( '%1$s new strings added, %2$s updated, %3$s fuzzied, and %4$s obsoleted.' ),
+			__( '%1$s new strings added, %2$s updated, %3$s fuzzied, and %4$s obsoleted.', 'glotpress' ),
 			$originals_added,
 			$originals_existing,
 			$originals_fuzzied,

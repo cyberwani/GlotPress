@@ -59,7 +59,7 @@ function gp_tmpl_filter_args( $args ) {
 }
 
 function gp_tmpl_404( $args = array()) {
-	gp_tmpl_load( '404', $args + array('title' => __('Not Found'), 'http_status' => 404 ) );
+	gp_tmpl_load( '404', $args + array('title' => __('Not Found', 'glotpress' ), 'http_status' => 404 ) );
 	exit();
 }
 
@@ -111,7 +111,7 @@ function gp_project_names_from_root( $leaf_project ) {
 function gp_project_links_from_root( $leaf_project ) {
 	$links = array();
 	$path_from_root = array_reverse( $leaf_project->path_to_root() );
-	$links[] = empty( $path_from_root)? __('Projects') : gp_link_get( gp_url( '/projects' ), __('Projects') );
+	$links[] = empty( $path_from_root)? __( 'Projects', 'glotpress' ) : gp_link_get( gp_url( '/projects' ), __( 'Projects', 'glotpress' ) );
 	foreach( $path_from_root as $project ) {
 		$links[] = gp_link_project_get( $project, esc_html( $project->name ) );
 	}
@@ -221,7 +221,7 @@ function gp_locales_dropdown( $name_and_id, $selected_slug = null, $attrs = arra
 	$labels = array_map( create_function( '$l', 'return $l->slug." &mdash; ". $l->english_name;'), $locales );
 	sort( $values );
 	sort( $labels );
-	return gp_select( $name_and_id, array_merge( array( '' => __('&mdash; Locale &mdash;') ), array_combine( $values, $labels ) ), $selected_slug, $attrs );
+	return gp_select( $name_and_id, array_merge( array( '' => __( '&mdash; Locale &mdash;', 'glotpress' ) ), array_combine( $values, $labels ) ), $selected_slug, $attrs );
 }
 
 function gp_projects_dropdown( $name_and_id, $selected_project_id = null, $attrs = array(), $exclude = array() ) {
@@ -242,7 +242,7 @@ function gp_projects_dropdown( $name_and_id, $selected_project_id = null, $attrs
 		}
 	}
 
-	$options = array( '' => __('&mdash; No parent &mdash;') );
+	$options = array( '' => __( '&mdash; No parent &mdash;', 'glotpress' ) );
 
 	foreach( $top as $top_id ) {
 		$stack = array( $top_id );
@@ -322,13 +322,13 @@ function gp_checked( $checked ) {
 
 function gp_project_actions( $project, $translation_sets ) {
 	$actions = array(
-		gp_link_get( gp_url_project( $project, 'import-originals' ), __( 'Import originals' ) ),
-		gp_link_get( gp_url_project( $project, array( '-permissions' ) ), __('Permissions') ),
-		gp_link_get( gp_url_project( '', '-new', array('parent_project_id' => $project->id) ), __('New Sub-Project') ),
-		gp_link_get( gp_url( '/sets/-new', array( 'project_id' => $project->id ) ), __('New Translation Set') ),
-		gp_link_get( gp_url_project( $project, array( '-mass-create-sets' ) ), __('Mass-create Translation Sets') ),
-		gp_link_get( gp_url_project( $project, '-branch'), __('Branch Project') ),
-		gp_link_with_ays_get( gp_url_project( $project, '-delete'), __('Delete Project'), array( 'ays-text' => 'Do you really want to delete this project?' ) )
+		gp_link_get( gp_url_project( $project, 'import-originals' ), __( 'Import originals', 'glotpress' ) ),
+		gp_link_get( gp_url_project( $project, array( '-permissions' ) ), __( 'Permissions', 'glotpress') ),
+		gp_link_get( gp_url_project( '', '-new', array('parent_project_id' => $project->id) ), __( 'New Sub-Project', 'glotpress' ) ),
+		gp_link_get( gp_url( '/sets/-new', array( 'project_id' => $project->id ) ), __( 'New Translation Set', 'glotpress' ) ),
+		gp_link_get( gp_url_project( $project, array( '-mass-create-sets' ) ), __( 'Mass-create Translation Sets', 'glotpress' ) ),
+		gp_link_get( gp_url_project( $project, '-branch'), __( 'Branch Project', 'glotpress' ) ),
+		gp_link_with_ays_get( gp_url_project( $project, '-delete'), __( 'Delete Project', 'glotpress' ), array( 'ays-text' => __( 'Do you really want to delete this project?', 'glotpress' ) ) )
 	);
 
 	$actions = apply_filters( 'gp_project_actions', $actions, $project );
@@ -348,19 +348,19 @@ function gp_project_actions( $project, $translation_sets ) {
 
 function gp_project_options_form( $project ) {
 	return '
-			<a href="#" class="personal-options" id="personal-options-toggle"> ' . __('Personal project options &darr;') . '</a>
+			<a href="#" class="personal-options" id="personal-options-toggle"> ' . __( 'Personal project options &darr;', 'glotpress' ) . '</a>
 			<div class="personal-options">
 				<form action="' . gp_url_project( $project, '-personal' ) . '" method="post">
 				<dl>
-					<dt><label for="source-url-template">' . __('Source file URL') . '</label></dt>
+					<dt><label for="source-url-template">' . __( 'Source file URL', 'glotpress' ) . '</label></dt>
 					<dd>
 						<input type="text" value="' . esc_html( $project->source_url_template() ) . '" name="source-url-template" id="source-url-template" />
-						<small>' . __('URL to a source file in the project. You can use <code>%file%</code> and <code>%line%</code>. Ex. <code>https://trac.example.org/browser/%file%#L%line%</code>') .'</small>
+						<small>' . __( 'URL to a source file in the project. You can use <code>%file%</code> and <code>%line%</code>. Ex. <code>https://trac.example.org/browser/%file%#L%line%</code>', 'glotpress' ) .'</small>
 					</dd>
 				</dl>
 				<p>
-					<input type="submit" name="submit" value="' . esc_attr( __('Save &rarr;') ) . '" id="save" />
-					<a class="ternary" href="#" onclick="jQuery(\'#personal-options-toggle\').click();return false;">' . __('Cancel') . '</a>
+					<input type="submit" name="submit" value="' . esc_attr( __( 'Save &rarr;', 'glotpress' ) ) . '" id="save" />
+					<a class="ternary" href="#" onclick="jQuery(\'#personal-options-toggle\').click();return false;">' . __( 'Cancel', 'glotpress' ) . '</a>
 				</p>
 				</form>
 			</div>';
@@ -368,7 +368,7 @@ function gp_project_options_form( $project ) {
 
 function gp_entry_actions( $seperator = ' &bull; ' ) {
 	$actions = array(
-		'<a href="#" class="copy" tabindex="-1">' . __('Copy from original') . '</a>'
+		'<a href="#" class="copy" tabindex="-1">' . __( 'Copy from original', 'glotpress' ) . '</a>'
 	);
 
 	$actions = apply_filters( 'gp_entry_actions', $actions );
@@ -376,7 +376,7 @@ function gp_entry_actions( $seperator = ' &bull; ' ) {
 
 	echo implode( $seperator, $actions );
 	/*
-	<a href="#" class="copy" tabindex="-1"><?php _e('Copy from original'); ?></a> &bull;
-	<a href="#" class="gtranslate" tabindex="-1"><?php _e('Translation from Google'); ?></a>
+	<a href="#" class="copy" tabindex="-1"><?php _e( 'Copy from original', 'glotpress' ); ?></a> &bull;
+	<a href="#" class="gtranslate" tabindex="-1"><?php _e( 'Translation from Google', 'glotpress' ); ?></a>
 	*/
 }
