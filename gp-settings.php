@@ -171,3 +171,6 @@ function gp_run_route() {
 	}
 }
 add_action( 'template_redirect', 'gp_run_route' );
+
+// Load the plugin's translated strings
+load_plugin_textdomain( 'glotpress', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
